@@ -1,14 +1,13 @@
+$stdout.sync = true
 
-def calculate_apartment_price(area, material, floor, district, style, category)
-  mat_index = case material.downcase
-              when 'бетон', 'панель'
-                300
-              when 'цегла'
-                500
-              when 'композит'
-                800
+def calculate_apartment_price(area, material_choice, floor, district_choice, style_choice, category_choice)
+
+  mat_index = case material_choice
+              when 1 then 300 # бетон / панель
+              when 2 then 500 # цегла
+              when 3 then 800 # композит
               else
-                raise ArgumentError, "Невідомий матеріал: #{material}"
+                raise ArgumentError, "Некоректний вибір матеріалу (оберіть 1, 2 або 3)"
               end
 
   cost_price = area * mat_index
@@ -18,37 +17,37 @@ def calculate_apartment_price(area, material, floor, district, style, category)
                elsif floor >= 1
                  1.1
                else
-                 raise ArgumentError, 'Поверх має бути >= 1'
+                 raise ArgumentError, "Поверх має бути >= 1"
                end
 
-  district_coef = if district.downcase == 'центр'
-                    1.7
-                  elsif district.downcase == 'спальний'
-                    1.4
-                  elsif district.downcase == 'приміський'
-                    1.15
+  district_coef = if district_choice == 1
+                    1.7  # центр
+                  elsif district_choice == 2
+                    1.4  # спальний
+                  elsif district_choice == 3
+                    1.15 # приміський
                   else
-                    raise ArgumentError, "Невідомий район: #{district}"
+                    raise ArgumentError, "Некоректний вибір району (оберіть 1, 2 або 3)"
                   end
 
   location_price = cost_price * floor_coef * district_coef
 
-  style_coef = case style.downcase
-               when 'хайтех' then 2.0
-               when 'ексклюзів' then 1.7
-               when 'індивідуал' then 1.5
-               when 'стандарт' then 1.05
+  style_coef = case style_choice
+               when 1 then 2.0  # хайтех
+               when 2 then 1.7  # ексклюзів
+               when 3 then 1.5  # індивідуал
+               when 4 then 1.05 # стандарт
                else
-                 raise ArgumentError, "Невідомий стиль: #{style}"
+                 raise ArgumentError, "Некоректний вибір стилю (оберіть 1, 2, 3 або 4)"
                end
 
   builder_price = location_price * style_coef
 
-  cat_index = category.downcase == 'елітна' ? 1.75 :
-              (category.downcase == 'бюджетна' ? 1.5 :
-              (category.downcase == 'пільгова' ? 1.07 : nil))
+  cat_index = category_choice == 1 ? 1.75 :
+              (category_choice == 2 ? 1.5 :
+              (category_choice == 3 ? 1.07 : nil))
 
-  raise ArgumentError, "Невідома категорія: #{category}" if cat_index.nil?
+  raise ArgumentError, "Некоректний вибір категорії (оберіть 1, 2 або 3)" if cat_index.nil?
 
   total_price = builder_price * cat_index
 
@@ -64,25 +63,42 @@ puts 'Lab №2: Розгалуження'
 print 'Введіть площу (м²): '
 area = gets.chomp.to_f
 
-print 'Введіть матеріал (бетон / цегла / композит): '
-material = gets.chomp.strip
+puts "\nОберіть матеріал:"
+puts '  1 - Бетон / Панель'
+puts '  2 - Цегла'
+puts '  3 - Композитні матеріали'
+print 'Ваш вибір (1-3): '
+material_choice = gets.chomp.to_i
 
-print 'Введіть поверх: '
+print "\nВведіть поверх: "
 floor = gets.chomp.to_i
 
-print 'Введіть район (центр / спальний / приміський): '
-district = gets.chomp.strip
+puts "\nОберіть район:"
+puts '  1 - Центр'
+puts '  2 - Спальний'
+puts '  3 - Приміський'
+print 'Ваш вибір (1-3): '
+district_choice = gets.chomp.to_i
 
-print 'Введіть стиль (хайтех / ексклюзів / індивідуал / стандарт): '
-style = gets.chomp.strip
+puts "\nОберіть стиль:"
+puts '  1 - Хайтех'
+puts '  2 - Ексклюзів'
+puts '  3 - Індивідуал'
+puts '  4 - Стандарт'
+print 'Ваш вибір (1-4): '
+style_choice = gets.chomp.to_i
 
-print 'Введіть категорію (елітна / бюджетна / пільгова): '
-category = gets.chomp.strip
+puts "\nОберіть категорію:"
+puts '  1 - Елітна'
+puts '  2 - Бюджетна'
+puts '  3 - Пільгова'
+print 'Ваш вибір (1-3): '
+category_choice = gets.chomp.to_i
 
 begin
-  res = calculate_apartment_price(area, material, floor, district, style, category)
+  res = calculate_apartment_price(area, material_choice, floor, district_choice, style_choice, category_choice)
 
-  puts "\n" + ('=' * 50)
+  puts "\n" + ('=')
   puts 'РЕЗУЛЬТАТИ ОБЧИСЛЕНЬ:'
   puts '-'
   printf("Собівартість (СВ):           %12.2f грн\n", res[:cost_price])
