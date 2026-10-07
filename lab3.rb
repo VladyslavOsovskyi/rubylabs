@@ -62,4 +62,4 @@ puts "   Кількість: #{both_types_count}"
 puts "\n8. Постійні клієнти, що сьогодні НЕ відвідували кафе:"
 puts "   Список: #{not_visited_clients.inspect}"
 puts "   Кількість: #{not_visited_count}"
-puts '=' * 60
+puts '='
