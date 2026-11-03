@@ -1,6 +1,6 @@
 # array
 cpp_code = [
-  "#include <stdio.h>",
+  "     #include <stdio.h>",
   "#include <stdlib.h>",
   "#define MAX_SIZE 100",
   "#ifdef DEBUG",
@@ -13,13 +13,13 @@ cpp_code = [
   "    return 0;",
   "}"
 ]
-PREPROCESSOR_REGEX = /^\s*#\s*([a-zA-Z_]\w*)/
+PREPROCESSOR_REGEX = /^(\s*)#\s*([a-zA-Z_]\w*)/
 
 # process of arrays function
 def transform_preprocessor_directives(lines)
   lines.map do |line|
     line.gsub(PREPROCESSOR_REGEX) do |_match|
-      "_#{$1.upcase}"
+      "#{$1}_#{$2.upcase}"
     end
   end
 end
